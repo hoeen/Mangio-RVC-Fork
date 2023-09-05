@@ -127,13 +127,13 @@ def run(rank, n_gpus, hps):
         collate_fn = TextAudioCollate()
     train_loader = DataLoader(
         train_dataset,
-        num_workers=4,
+        num_workers=0, # 4
         shuffle=False,
         pin_memory=True,
         collate_fn=collate_fn,
         batch_sampler=train_sampler,
-        persistent_workers=True,
-        prefetch_factor=8,
+        # persistent_workers=True,
+        prefetch_factor=None, #8
     )
     if hps.if_f0 == 1:
         net_g = RVC_Model_f0(
