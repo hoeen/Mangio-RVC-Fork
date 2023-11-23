@@ -152,7 +152,7 @@ requirements_file="requirements.txt"
 
 # install requirements
 # python3.8 -r pip install requirements.txt
-pip install -r requirements.txt
+# pip install -r requirements.txt
 
 # Run the main script
 python3.10 infer-web.py

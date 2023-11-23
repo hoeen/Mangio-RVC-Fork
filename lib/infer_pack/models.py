@@ -738,10 +738,14 @@ class SynthesizerTrnMs768NSFsid(nn.Module):
         m_p, logs_p, x_mask = self.enc_p(phone, pitch, phone_lengths)
         z, m_q, logs_q, y_mask = self.enc_q(y, y_lengths, g=g)
         z_p = self.flow(z, y_mask, g=g)
+        ### negative CE 빠짐
+        ### monotonic alignment 빠짐
+        ### stochastic duration predictor 빠짐
         z_slice, ids_slice = commons.rand_slice_segments(
             z, y_lengths, self.segment_size
         )
         # print(-1,pitchf.shape,ids_slice,self.segment_size,self.hop_length,self.segment_size//self.hop_length)
+        ### pitch 따로 처리함
         pitchf = commons.slice_segments2(pitchf, ids_slice, self.segment_size)
         # print(-2,pitchf.shape,z_slice.shape)
         o = self.dec(z_slice, pitchf, g=g)
@@ -749,6 +753,8 @@ class SynthesizerTrnMs768NSFsid(nn.Module):
 
     def infer(self, phone, phone_lengths, pitch, nsff0, sid, rate=None):
         g = self.emb_g(sid).unsqueeze(-1)
+
+        # pitch 정보만 추가
         m_p, logs_p, x_mask = self.enc_p(phone, pitch, phone_lengths)
         z_p = (m_p + torch.exp(logs_p) * torch.randn_like(m_p) * 0.66666) * x_mask
         if rate:

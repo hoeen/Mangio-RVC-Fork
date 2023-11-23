@@ -5,6 +5,9 @@ __pycache__
 /DATASETS
 /LOGS
 /RUNTIME
+/audios
+/datasets
+rmvpe.1.pt
 *.pyd
 hubert_base.pt
 /logs
